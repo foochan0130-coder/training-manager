@@ -1,0 +1,32 @@
+{
+  "days": {
+    "2025-11-02": { "type": "A",     "status": "done" },
+    "2025-12-22": { "type": "A",     "status": "done" },
+    "2026-06-08": { "type": "A",     "status": "done" },
+    "2026-07-18": { "type": "A",     "status": "done" },
+    "2026-07-20": { "type": "B",     "status": "done" },
+    "2026-07-22": { "type": "home2", "status": "done" },
+    "2026-08-04": { "type": "A",     "status": "done" },
+    "2026-08-06": { "type": "home1", "status": "done" },
+    "2026-08-17": { "type": "B",     "status": "done" },
+    "2026-08-19": { "type": "home2", "status": "done" },
+    "2026-08-24": { "type": "A",     "status": "done" },
+    "2026-08-27": { "type": "home1", "status": "done" },
+    "2026-09-02": { "type": "B",     "status": "done" },
+    "2026-09-05": { "type": "home2", "status": "done" }
+  },
+  "equipment": [
+    { "id": "seed-チェストプレス",       "name": "チェストプレス",       "weight": 37.5, "updated": "2026-08-04" },
+    { "id": "seed-ショルダープレス",     "name": "ショルダープレス",     "weight": 30,   "updated": "2026-06-08" },
+    { "id": "seed-プルダウン",           "name": "プルダウン",           "weight": 37.5, "updated": "2026-09-02" },
+    { "id": "seed-シーテッドロー",       "name": "シーテッドロー",       "weight": 42,   "updated": "2026-06-08" },
+    { "id": "seed-バイセップスカール",   "name": "バイセップスカール",   "weight": 32,   "updated": "2026-06-08" },
+    { "id": "seed-アブドミナル",         "name": "アブドミナル",         "weight": 55,   "updated": "2026-08-04" },
+    { "id": "seed-トーソローテーション", "name": "トーソローテーション", "weight": 57.5, "updated": "2026-08-24" },
+    { "id": "msejba6v",                  "name": "レッグプレス",         "weight": 77.5, "updated": "2026-08-04" }
+  ],
+  "interval": 1,
+  "weights": [
+    { "date": "2026-07-20", "kg": 70 }
+  ]
+}

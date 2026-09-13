@@ -1,0 +1,14 @@
+{
+  "name": "筋トレ帳",
+  "short_name": "筋トレ帳",
+  "description": "8日周期の筋トレスケジュールと器具重量・体重を記録するPWA",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101216",
+  "theme_color": "#101216",
+  "icons": [
+    { "src": "icon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any maskable" }
+  ]
+}
