@@ -33,9 +33,6 @@ public/
   manifest.webmanifest
   sw.js              ネットワーク優先のservice worker
   icon.svg
-  data/
-    seed-data.json   まだGistを持っていない人が「新しく作る」を押したときの
-                     初期データ(今までの実績)。Gist作成後は一切参照されない。
 ```
 
 ## 開発
@@ -56,9 +53,9 @@ Node 18 以上が必要(Vite 8)。
 
 ## 初回セットアップ(Gist接続)
 
-1. デプロイ後、サイトを開く(このときはまだ`public/data/seed-data.json`が初期値として表示される)
-2. [github.com/settings/tokens/new](https://github.com/settings/tokens/new?scopes=gist) で
+1. [github.com/settings/tokens/new](https://github.com/settings/tokens/new?scopes=gist) で
    **gistスコープのみ**チェックしたPersonal Access Tokenを発行
-3. 「記録」タブの「データの同期」でトークンを貼り、「新しく作る」を押す
-   → 今表示されているデータを元にGistが作成され、以後はそのGistが本体になる
-4. 別の端末で使うときは、同じトークンと発行されたGist IDを「既存のGistに接続」で入力する
+2. 「記録」タブの「データの同期」でトークンを貼り、「新しく作る」を押す
+   → 今表示されているデータ(未接続時は空)を元にGistが作成され、以後はそのGistが本体になる
+3. 別の端末で使うときは、同じトークンと発行されたGist IDを「既存のGistに接続」で入力する
+   (Gist IDは「データの同期」カードに表示されているものをコピーできる)
