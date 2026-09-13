@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { setGistConfig, clearGistConfig, createGistWithData } from "../lib/gist.js";
+import { setGistConfig, clearGistConfig, createGistWithData, getGistConfig } from "../lib/gist.js";
+import { getLastSyncedAt } from "../lib/storage.js";
 
 const STATUS_TEXT = {
   synced: "✅ GitHub Gistと同期済み",
@@ -8,11 +9,19 @@ const STATUS_TEXT = {
   error: "❌ 直近の保存がGistに反映できていません",
 };
 
+function formatSyncedAt(iso) {
+  if (!iso) return "まだ同期していません";
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export default function SyncSettings({ status, error, configured, currentData, onConnected, onDisconnect }) {
   const [token, setToken] = useState("");
   const [gistId, setGistId] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const connectExisting = async () => {
     if (!token.trim() || !gistId.trim()) { setMsg("トークンとGist IDの両方を入力してください"); return; }
@@ -43,6 +52,24 @@ export default function SyncSettings({ status, error, configured, currentData, o
     onDisconnect();
   };
 
+  const retry = async () => {
+    setBusy(true);
+    await onConnected();
+    setBusy(false);
+  };
+
+  const copyGistId = async (id) => {
+    try {
+      await navigator.clipboard.writeText(id);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      setMsg("コピーできませんでした。長押しで手動でコピーしてください");
+    }
+  };
+
+  const currentGistId = configured ? getGistConfig()?.gistId : null;
+
   return (
     <div className="menuCard">
       <div style={{ fontSize: 14, fontWeight: 700, padding: "2px 0 2px 10px", marginBottom: 8, borderLeft: "3px solid #8C929A" }}>
@@ -54,7 +81,22 @@ export default function SyncSettings({ status, error, configured, currentData, o
       {error && <div style={{ fontSize: 11, color: "#D97878", marginBottom: 8 }}>{error}</div>}
 
       {configured ? (
-        <button className="ghostBtn" style={{ width: "100%" }} onClick={disconnect}>接続を解除</button>
+        <>
+          <div style={{ fontSize: 11, color: "#8C929A", marginBottom: 4 }}>最終同期: {formatSyncedAt(getLastSyncedAt())}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: "#8C929A" }}>Gist ID:</div>
+            <div style={{ fontSize: 12, fontFamily: "monospace", color: "#C9CDD2", wordBreak: "break-all", flex: 1 }}>{currentGistId}</div>
+            <button className="step" style={{ width: "auto", padding: "0 10px", fontSize: 11 }} onClick={() => copyGistId(currentGistId)}>
+              {copied ? "✓" : "コピー"}
+            </button>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {(status === "offline" || status === "error") && (
+              <button className="ghostBtn" style={{ flex: 1 }} disabled={busy} onClick={retry}>もう一度試す</button>
+            )}
+            <button className="ghostBtn" style={{ flex: 1 }} onClick={disconnect}>接続を解除</button>
+          </div>
+        </>
       ) : (
         <>
           <div style={{ fontSize: 12, color: "#8C929A", lineHeight: 1.7, marginBottom: 10 }}>

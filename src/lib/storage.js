@@ -5,7 +5,22 @@ import { todayK } from "./date.js";
 import { getGistConfig, fetchGistData, updateGistData } from "./gist.js";
 
 const CACHE_KEY = "gym-tracker:cache-v1";
+const LAST_SYNCED_KEY = "gym-tracker:last-synced";
 const SEED_URL = `${import.meta.env.BASE_URL}data/seed-data.json`;
+
+function markSynced() {
+  try {
+    localStorage.setItem(LAST_SYNCED_KEY, new Date().toISOString());
+  } catch (e) {}
+}
+
+export function getLastSyncedAt() {
+  try {
+    return localStorage.getItem(LAST_SYNCED_KEY);
+  } catch (e) {
+    return null;
+  }
+}
 
 function isValidData(d) {
   return d && typeof d === "object" && d.days && d.equipment && d.weights;
@@ -60,6 +75,7 @@ export async function loadData() {
     const remote = await fetchGistData(config.token, config.gistId);
     if (!isValidData(remote)) throw new Error("Gistのデータ形式が不正です");
     writeCache(remote);
+    markSynced();
     return { status: "synced", data: withFreshQueue(remote) };
   } catch (e) {
     const cached = readCache();
@@ -76,6 +92,7 @@ export async function saveData(data) {
   try {
     const { queue, ...rest } = data;
     await updateGistData(config.token, config.gistId, rest);
+    markSynced();
     return { status: "synced" };
   } catch (e) {
     return { status: "error", error: e.message };
